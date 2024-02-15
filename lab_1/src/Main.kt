@@ -11,14 +11,6 @@ fun main() {
     println("${phone.findContact(Contact("Daria", "89231654782"))}")
     println("${phone.queryContact("Daria")}")
 
-    /*val tree = Node(2).apply {
-        insert(5)
-        insert(1)
-        insert(3)
-        println(this)
-        delete(3)
-    }*/
-
     val binaryTree = Node(5)
     binaryTree.insert(3)
     binaryTree.insert(7)
