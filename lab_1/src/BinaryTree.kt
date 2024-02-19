@@ -5,12 +5,16 @@ class Node(
     var left: Node? = null,
     var right: Node? = null) {
 
+    //Значение = значению текущего узла -> конец поиска.
+    //Больше - право, меньше - лево.
     fun find(value: Int): Node? = when {
         this.key > value -> left?.find(value)
         this.key < value -> right?.find(value)
         else -> this
     }
 
+    //Если значение отсуствует = вставить в узел, который имеет свободную "щель".
+    //Присутствует = ничего делать не надо.
     fun insert(value: Int) {
         if (value > this.key) {
             if (this.right == null) {
@@ -27,6 +31,7 @@ class Node(
         }
     }
 
+    //Скан дерева. Классификация по кол-ву ненулевых дочерних узлов.
     fun delete(value: Int) {
         when {
             value > key -> scan(value, this.right, this)
@@ -37,7 +42,7 @@ class Node(
 
     private fun scan(value: Int, node: Node?, parent: Node?) {
         if (node == null) {
-            System.out.println("value" + value)
+            System.out.println("value" + value + "is null")
             return
         }
         when {
@@ -62,6 +67,8 @@ class Node(
         }
     }
 
+    //Если узел является корневым, мы не можем его устранить.
+    //В противном случае достаточно установить null соответствующего потомка родителя.
     private fun removeNoChildNode(node: Node, parent: Node?) {
         if (parent == null) {
             throw IllegalStateException("Can not remove the root node without child nodes")
@@ -73,12 +80,15 @@ class Node(
         }
     }
 
+    //Достаточно «переместить» единственный дочерний узел в узел, который мы удаляем.
     private fun removeSingleChildNode(parent: Node, child: Node) {
         parent.key = child.key
         parent.left = child.left
         parent.right = child.right
     }
 
+    //Мы должны найти узел, который должен заменить узел, который мы хотим удалить.
+    //Выбрать узел в левом поддереве с наибольшим ключом.
     private fun removeTwoChildNode(node: Node) {
         val leftChild = node.left!!
         leftChild.right?.let {
@@ -102,6 +112,7 @@ class Node(
         }
     }
 
+    //Предварительный заказ (посещение родительского узла, затем левого потомка, затем правого потомка)
     fun visit(): Array<Int> {
         val a = left?.visit() ?: emptyArray()
         val b = right?.visit() ?: emptyArray()
@@ -111,8 +122,9 @@ class Node(
     override fun toString(): String {
         return buildString {
             append(this@Node.key.toString())
-            append('\n')
+            append("\nleft ")
             append(left?.toString().orEmpty())
+            append("\nrigth ")
             append(right?.toString().orEmpty())
             append('\n')
         }
