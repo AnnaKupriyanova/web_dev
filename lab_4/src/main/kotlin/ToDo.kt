@@ -1,28 +1,34 @@
+import java.time.LocalDate
+
 class ToDo(private var todoList: MutableList<ToDoItem> = mutableListOf()) {
-    fun add(item: ToDoItem) = todoList.add(item)
-    fun delete(desc: String): Boolean = todoList.removeIf { it.desc.equals((desc))}
-    fun deleteActive(): Boolean = todoList.removeIf { it.status.equals(Status.ACTIVE) }
-    fun deleteDone(): Boolean = todoList.removeIf { it.status.equals(Status.DONE) }
-    fun deleteAll() = todoList.clear()
-    private fun find(desc: String): ToDoItem? = todoList.find { it.desc.equals(desc) }
-    fun updateDesc(descOld: String, descNew: String, statusNew: Status): Boolean {
-        var item = find(descOld)
-        if (item != null && descNew != null) {
-            todoList.set(todoList.indexOf(item), item.apply { this.desc = descNew })
-            return true
-        } else return false
-    }
-    fun updateStatus(desc: String, status: Status): Boolean {
-        var item = find(desc)
-        if (item != null) {
-            todoList.set(todoList.indexOf(item), item.apply { this.status = status })
-            return true
-        } else return false
-    }
-    fun listToDo(status: Status? = null): List<ToDoItem> = when(status) {
-        Status.ACTIVE -> todoList.filter { it.status.equals(Status.ACTIVE) }
-        Status.DONE -> todoList.filter { it.status.equals(Status.DONE) }
-        null -> todoList
+    fun listOutPut(): List<ToDoItem> = todoList
+
+    fun addItem(item: ToDoItem) = todoList.add(item)
+
+    fun getId(id: Int): ToDoItem? = todoList.find { it.id == id }
+    fun getDesc(desc: String):  List<ToDoItem> {
+        return todoList.filter {
+            it.desc.lowercase().contains(desc.lowercase()) || it.subs.any { sub -> sub.desc.lowercase().contains(desc.lowercase()) }
+        }
     }
 
+    fun deleteId(id: Int): Boolean {
+        val item = todoList.find { it.id == id }
+        if (item != null) {
+            todoList.remove(item)
+            return true
+        } else return false
+    }
+    fun deleteAll() = todoList.clear()
+
+    fun updateItem(id: Int, newDesc: String, newStatus: Status, newDate: LocalDate, newDop: String): Boolean {
+        val item = todoList.find { it.id == id }
+        if (item != null) {
+            item.desc = newDesc
+            item.status = newStatus
+            item.date = newDate
+            item.dopInfo = newDop
+            return true
+        } else return false
+    }
 }
