@@ -1,12 +1,15 @@
 fun main() {
     println("Mobile")
-    val phone = MobilePhone("89236092710")
+    val phone = MobilePhone("Anna", "89236092710")
     phone.addContact(Contact("Sveta", "89234562134"))
     phone.addContact(Contact("Daria", "89231654782"))
     phone.addContact(Contact("Nik", "89231115687"))
     phone.printContacts()
     print("\n")
     phone.updateContact(Contact("Sveta", "89234562134"), Contact("Svetlana", "89236912366"))
+
+    phone.updateContact(Contact("Daria", "89231654782").copy(name = "Dasha"))
+
     phone.removeContact(Contact("Nik", "89231115687"))
     phone.printContacts()
     println("index = ${phone.findContact(Contact("Daria", "89231654782"))}")

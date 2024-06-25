@@ -1,6 +1,6 @@
 data class Contact(val name: String, val phone: String)
 
-class MobilePhone(private val myPhone: String) {
+class MobilePhone(private val myName: String, private val myPhone: String) {
     private val myContacts: MutableList<Contact> = ArrayList()
 
     fun addContact(newContact: Contact): Boolean {
@@ -39,5 +39,11 @@ class MobilePhone(private val myPhone: String) {
 
     fun printContacts() {
         myContacts.forEach { println("${it.name}: ${it.phone}") }
+    }
+
+    fun updateContact(newContact: Contact) {
+        myContacts.replaceAll {
+            if (it.name == newContact.name || it.phone == newContact.phone) newContact else it
+        }
     }
 }
